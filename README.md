@@ -1,27 +1,86 @@
-<a href="https://youtu.be/HubXt90MLfI" target="_blank"><img src="https://i.imgur.com/sG7xxyc.png" title="Clarity Coders YouTube" /></a>
+# Video Generator from Reddit Images
 
-## Create a reddit account!
-- Signup for a reddit account.
-- Select the "Are you a developer? Create an app button" <a href="https://reddit.com/prefs/apps"  target="_blank">Here</a>.
-- Give you program a name and a redirect URL(http://<span></span>localhost).
-- On the final screen note your client id and secret.
+This project scrapes image data from Reddit, passes it to RabbitMQ, stores the images in AWS S3, and then fetches the data to produce a video using Kafka.
 
-| Create Account | Access Developer | Name | ID and secret |
-| --- | --- | --- | --- |
-| <img src="https://i.imgur.com/l5tWhOW.png" title="source: imgur.com" width="200" height="200" /> | <img src="https://i.imgur.com/Ir7Nqx6.png" title="source: imgur.com" width="200" height="200" /> | <img src="https://i.imgur.com/1hoKGvH.png" title="source: imgur.com" width="200" height="200" /> | <img src="https://i.imgur.com/JmH5vBn.png" title="source: imgur.com" width="200" height="200" /> |
+## Table of Contents
 
-## Run download script!
-- Add any subs you want to download to the sub_list.csv one per line.
-- Run SubDownload.py
-- The first time you run the script it will ask you for details. Note you don't need to enter a user name or password if you don't plan on posting.
-- The script will create a token.pickle file so you don't have to enter them again. If you mess up your credentials just delete the pickle file and it will ask for them again.
-- The script will create an images folder and fill it with images it finds. You can change how many posts it checks on each subreddit by changing POST_SEARCH_AMOUNT. Also not note every post is a image post so if you put in 5 it may only find 2 images.
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Setup and Installation](#setup-and-installation)
+- [Usage](#usage)
+- [Technologies Used](#technologies-used)
+- [Contributing](#contributing)
+- [License](#license)
 
+## Overview
 
-## Need more help?
-- YouTube <a href="https://www.youtube.com/claritycoders" target="_blank">Clarity Coders</a>
-- Chat with me! <a href="https://discord.gg/cAWW5qq" target="_blank">Discord</a>
+The project is designed to:
+1. Scrape images from a specified Reddit subreddit.
+2. Send the image data to RabbitMQ.
+3. Store the images in an AWS S3 bucket.
+4. Fetch the image data from S3 and produce a video using Kafka.
 
-<a href="https://discord.gg/cAWW5qq"><img
-                alt="Discord"
-                src="https://img.shields.io/discord/709518323720912956?label=Discord&logo=discord&logoColor=ffffff&labelColor=7289DA&color=2c2f33"></a>
+## Architecture
+
+1. **Reddit Scraper**: Scrapes images from a specified subreddit.
+2. **RabbitMQ**: Acts as a message broker for transferring image data.
+3. **AWS S3**: Stores the scraped images.
+4. **Kafka**: Used for producing and consuming image data to create a video.
+5. **Video Generator**: Consumes image data from Kafka and generates a video.
+
+## Setup and Installation
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+- AWS account with S3 access
+- Reddit API credentials
+
+### Installation Steps
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/Aditya-sairam/video-generator-BigData.git
+    cd video-generator-BigData
+    ```
+
+2. **Set up environment variables**:
+    Create a `.env` file in the root directory and add the following:
+    ```env
+    AWS_ACCESS_KEY_ID=your_aws_access_key
+    AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+    RABBITMQ_HOST=rabbitmq
+    KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    ```
+
+3. **Build and run the Docker containers**:
+    ```bash
+    docker-compose up --build
+    ```
+
+## Usage
+
+1. **Enter the required details**:
+    When prompted, enter the anime name, output video path, and audio path.
+    
+2. **Monitor the logs**:
+    Check the Docker container logs to ensure that the services are running correctly.
+
+## Technologies Used
+
+- Python
+- Docker
+- RabbitMQ
+- Kafka
+- AWS S3
+- Reddit API
+- PRAW (Python Reddit API Wrapper)
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License.
